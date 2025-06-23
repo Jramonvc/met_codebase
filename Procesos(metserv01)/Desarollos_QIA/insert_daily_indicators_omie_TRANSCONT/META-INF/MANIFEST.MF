@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Main-Class: org.example.MainKt
+Class-Path: mssql-jdbc-10.2.0.jre11.jar axis-saaj-1.4.jar slf4j-api-1.7.
+ 30.jar axis-jaxrpc-1.4.jar woodstox-core-5.2.1.jar jakarta.xml.bind-api
+ -2.3.2.jar log4j-1.2.17.jar axis-wsdl4j-1.5.1.jar commons-logging-1.0.4
+ .jar commons-codec-1.15.jar mssql-jdbc-12.8.1.jre11.jar protobuf-java-3
+ .21.9.jar xmlsec-2.2.1.jar OmelWS.jar mysql-connector-j-9.0.0.jar jakar
+ ta.activation-api-1.2.1.jar commons-discovery-0.2.jar OmelSecurity.jar 
+ mysql-connector-j-8.0.33.jar stax2-api-4.2.jar kotlin-stdlib-2.0.0.jar 
+ axis-1.4.jar annotations-13.0.jar
+
