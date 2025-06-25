@@ -1,0 +1,30 @@
+/****** Object:  StoredProcedure [METDB].[PR_CALCULO_MAXIMAEXPO]    Script Date: 23/06/2025 12:21:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER   PROCEDURE [METDB].[PR_CALCULO_MAXIMAEXPO] AS
+DECLARE
+  @V_Cliente Varchar(30);
+  Declare Cliente Cursor For 
+       SELECT CSM_CLI_NIF 
+	    FROM METDB.MET_CONTSML
+		WHERE CONVERT(DATE, GETDATE()) BETWEEN CSM_FECINI AND CSM_FECFIN
+		  OR CSM_FECINI > CONVERT(DATE, GETDATE())
+		  GROUP BY CSM_CLI_NIF
+BEGIN
+   Open Cliente
+	FETCH NEXT FROM Cliente Into @V_Cliente; 
+	WHILE @@FETCH_STATUS = 0  
+	 Begin
+	   BEGIN TRANSACTION;  
+	    UPDATE METDB.MET_CLIENTES
+          SET CLI_MAXEXPO = METDB.FT_EXPOSICION_MAS (@V_Cliente, CONVERT(DATE, GETDATE()))
+         WHERE CLI_NIF = @V_Cliente 
+       Commit TRANSACTION;  
+	    FETCH NEXT FROM Cliente Into @V_Cliente; 
+	 End
+	Close Cliente
+    Deallocate Cliente
+END

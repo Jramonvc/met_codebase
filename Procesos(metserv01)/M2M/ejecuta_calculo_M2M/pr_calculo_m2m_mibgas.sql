@@ -1,0 +1,29 @@
+/****** Object:  StoredProcedure [METDB].[PR_CALCULO_M2M_MIBGAS]    Script Date: 23/06/2025 12:20:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [METDB].[PR_CALCULO_M2M_MIBGAS] AS
+DECLARE
+  @V_Cliente Varchar(30);
+  Declare Cliente Cursor For 
+     Select DISTINCT CSM_CLI_NIF
+	   From METDB.MET_CONTSML, METDB.MET_VOLCONTDET V1
+      Where CSM_ID = VCD_CSM_ID
+        AND VCD_MONTH >= DATEADD(DAY, 1 - DAY(GETDATE()), CAST(GETDATE() AS DATE))
+        AND EXISTS (SELECT 'X' FROM METDB.MET_VOLCONTDET V2 WHERE V2.VCD_CSM_ID = CSM_ID AND VCD_TIPMOV = 'S' AND VCD_IDM_CODIGO LIKE 'MIB%')
+BEGIN
+   Open Cliente
+	FETCH NEXT FROM Cliente Into @V_Cliente; 
+	WHILE @@FETCH_STATUS = 0  
+	 Begin
+	  BEGIN TRANSACTION;  
+	    UPDATE METDB.MET_CLIENTES
+          SET CLI_M2MMIBGAS = METDB.FT_M2M (CLI_NIF)
+         WHERE CLI_NIF = @V_Cliente 
+      Commit Transaction;
+	    FETCH NEXT FROM Cliente Into @V_Cliente; 
+	 End
+	Close Cliente
+    Deallocate Cliente
+END
