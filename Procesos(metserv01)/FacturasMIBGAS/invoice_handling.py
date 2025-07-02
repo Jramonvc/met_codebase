@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import shutil
 import time
+import keyring
 
 start_time = time.time()
 
@@ -12,10 +13,11 @@ base_folder = r'M:\MET EE\Operaciones\MIBGAS\CentroDescargasGAS'
 processed_folder = os.path.join(base_folder, 'Procesados')
 
 #database connection data
+sql = keyring.get_credential("sql", None)
 server = 'met-esp-prod.database.windows.net'
 db = 'Risk_MGMT_Spain'
-username = 'sqluser'
-password = 'cwD9KVms4Qdv4mLy'
+sqlusername = sql.username
+sqlpassword = sql.password
 table1 = 'METDB.MET_FACTMIBGASCAB'
 table2 = 'METDB.MET_FACTMIBGASLIN'
 
@@ -23,8 +25,8 @@ conn_string = (
      f'DRIVER={{ODBC Driver 17 for SQL Server}};'
     f'SERVER={server};'
     f'DATABASE={db};'
-    f'UID={username};'
-    f'PWD={password};'
+    f'UID={sqlusername};'
+    f'PWD={sqlpassword};'
     f'Encrypt=yes;'
     f'TrustServerCertificate=no;'
     f'Connection Timeout=30;'
