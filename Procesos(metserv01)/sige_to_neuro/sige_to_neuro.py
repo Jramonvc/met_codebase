@@ -2,6 +2,7 @@ from ftplib import FTP, error_perm
 import os
 from datetime import datetime, timedelta
 import shutil
+import keyring
 
 #previous day folder
 def get_yesterday():
@@ -100,13 +101,15 @@ def clear_folder(folder_path):
 
 #main function
 def transfer_files():
+    sige = keyring.get_credential("sige", None) # different in metserv01
     sige_host = '82.194.94.192'
-    sige_user = 'SigeMet'
-    sige_pass = 'bP3gT0kI9zE1cS5f'
+    sige_user = sige.username
+    sige_pass = sige.password
 
+    neuro = keyring.get_credential("neuro", None)   # different in metserv01
     neuro_host = 'xml.neuroenergia.com'
-    neuro_user = 'c1641'
-    neuro_pass = 'tlynnj63(MB'
+    neuro_user = neuro.username
+    neuro_pass = neuro.password
 
     yesterday_folder = get_yesterday()
     remote_path_sige = f"/sige/METElectricidad/Ocsum/Import/{yesterday_folder}"
